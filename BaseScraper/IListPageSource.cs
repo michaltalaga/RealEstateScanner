@@ -2,5 +2,5 @@
 
 public interface IListPageSource
 {
-    IAsyncEnumerable<ListPage> Get(string pageUrlFormatString, int maxPagesToDownload = int.MaxValue);
+    IAsyncEnumerable<ListPage> Get(string pageUrlFormatString, int maxPages = int.MaxValue);
 }

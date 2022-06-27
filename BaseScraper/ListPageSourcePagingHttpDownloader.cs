@@ -9,11 +9,11 @@ public class ListPageSourcePagingHttpDownloader : IListPageSource
         this.httpClientFactory = httpClientFactory;
     }
 
-    public async IAsyncEnumerable<ListPage> Get(string pageUrlFormatString, int maxPagesToDownload = int.MaxValue)
+    public async IAsyncEnumerable<ListPage> Get(string pageUrlFormatString, int maxPages = int.MaxValue)
     {
         var currentPage = 1;
         var httpClient = httpClientFactory.CreateClient();
-        while (currentPage <= maxPagesToDownload)
+        while (currentPage <= maxPages)
         {
             var listPageUrl = string.Format(pageUrlFormatString, currentPage);
             string rawHtml;
