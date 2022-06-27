@@ -10,6 +10,7 @@ var host = new HostBuilder()
         serviceCollection.AddHttpClient();
         serviceCollection.AddTransient<IListPageFoundHandler, InMemoryGratkaListPageFoundHandler>();
         serviceCollection.AddTransient<IListPageSource, ListPageSourcePagingHttpDownloader>();
+        serviceCollection.AddTransient<IScraper, WebScraper>();
     })
     .Build();
 
