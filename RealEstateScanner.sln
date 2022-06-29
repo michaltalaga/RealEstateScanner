@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GratkaScraper", "GratkaScra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseScraper", "BaseScraper\BaseScraper.csproj", "{38CB8976-E068-4E65-8C00-816B9D2FBE9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseScraperTests", "BaseScraperTests\BaseScraperTests.csproj", "{35AFA609-0260-4960-B59F-B217059AA693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseScraperTests", "BaseScraperTests\BaseScraperTests.csproj", "{35AFA609-0260-4960-B59F-B217059AA693}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
