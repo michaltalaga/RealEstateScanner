@@ -13,9 +13,9 @@ public class WebScraper : IScraper
 
     public async Task Scrape(string urlFormatString, int maxPages = int.MinValue)
     {
-        await foreach (var item in listPageSource.Get(urlFormatString, maxPages))
+        await foreach (var page in listPageSource.Get(urlFormatString, maxPages))
         {
-            await listPageFoundHandler.Found(item);
+            await listPageFoundHandler.Found(page);
         }
     }
 }
