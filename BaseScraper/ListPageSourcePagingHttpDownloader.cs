@@ -25,7 +25,7 @@ public class ListPageSourcePagingHttpDownloader : IListPageSource
             {
                 yield break;
             }
-            yield return new ListPage(listPageUrl, rawHtml);
+            yield return new ListPage(Guid.NewGuid(), listPageUrl, rawHtml);
             currentPage++;
 
         }

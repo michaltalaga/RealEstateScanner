@@ -10,8 +10,8 @@ public class WebScraperTests
     int maxPages = 5;
     ListPage[] pages = new ListPage[]
     {
-        new ListPage("https://site.com/1", "dummy"),
-        new ListPage("https://site.com/1", "dummy"),
+        new ListPage(Guid.NewGuid(), "https://site.com/1", "dummy"),
+        new ListPage(Guid.NewGuid(), "https://site.com/2", "dummy"),
     };
     Mock<IListPageSource> listPageSourceMock = new();
     Mock<IListPageFoundHandler> listPageFoundHandlerMock = new();
