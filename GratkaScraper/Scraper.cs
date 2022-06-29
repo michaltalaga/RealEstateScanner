@@ -26,6 +26,16 @@ public class Scraper
     public async Task Run([TimerTrigger("0 */5 * * * *", RunOnStartup = runOnStartup)] TimerInfo myTimer)
     {
         var urlFormatString = "https://gratka.pl/nieruchomosci/mieszkania?cena-calkowita:min=1&sort=newest&page={0}";
-        await scraper.Scrape(urlFormatString, 2);
+        //await scraper.Scrape(urlFormatString, 2);
+    }
+
+    [Function("ListPageFound")]
+    public async Task Run1([CosmosDBTrigger(
+            databaseName: Consts.CosmosDatabaseName,
+            collectionName: Consts.CosmosListPageContainerName,
+            ConnectionStringSetting = Consts.ConnectionStringName,
+            LeaseCollectionName = "leases", CreateLeaseCollectionIfNotExists = true)] IReadOnlyList<ListPage> input)
+    {
+        return;
     }
 }
