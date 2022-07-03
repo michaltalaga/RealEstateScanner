@@ -15,11 +15,13 @@ public class Scraper
 
     private readonly ILogger logger;
     private readonly IScraper scraper;
+    private readonly IListPageFoundHandler listPageFoundHandler;
 
-    public Scraper(ILoggerFactory loggerFactory, IScraper scraper)
+    public Scraper(ILoggerFactory loggerFactory, IScraper scraper, IListPageFoundHandler listPageFoundHandler)
     {
         logger = loggerFactory.CreateLogger<Scraper>();
         this.scraper = scraper;
+        this.listPageFoundHandler = listPageFoundHandler;
     }
 
     [Function("Scraper")]
@@ -36,6 +38,9 @@ public class Scraper
             ConnectionStringSetting = Consts.ConnectionStringName,
             LeaseCollectionName = "leases", CreateLeaseCollectionIfNotExists = true)] IReadOnlyList<ListPage> input)
     {
-        return;
+        foreach (var item in input)
+        {
+            await listPageFoundHandler.Handle(item.RawHtml);
+        }
     }
 }

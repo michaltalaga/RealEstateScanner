@@ -18,6 +18,8 @@ var host = new HostBuilder()
         serviceCollection.AddTransient<IItemFoundSink, CosmosDbItemFoundSink>();
         serviceCollection.AddTransient<IListPageSource, ListPageSourcePagingHttpDownloader>();
         serviceCollection.AddTransient<IScraper, WebScraper>();
+        serviceCollection.AddTransient<IListPageFoundHandler, ListPageFoundHandler>();
+        serviceCollection.AddTransient<IListPageParser, GratkaListPageParser>();
         serviceCollection.AddSingleton(x =>
         {
             var connectionString = hostBuilderContext.Configuration.GetConnectionString("CosmosDBConnection");
