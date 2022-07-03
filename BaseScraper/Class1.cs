@@ -18,17 +18,19 @@ public interface IListPageFoundHandler
 {
     Task Found(ListPage listPage);
 }
-public class InMemoryGratkaListPageFoundHandler : IListPageFoundHandler
+public class InListPageFoundHandler : IListPageFoundHandler
 {
+    private readonly IListPageParser listPageParser;
+
+    public InListPageFoundHandler(IListPageParser listPageParser)
+    {
+        this.listPageParser = listPageParser;
+    }
     public async Task Found(ListPage listPage)
     {
-        var detailsPagesUrls = GetDetailsPagesUrls(listPage.RawHtml);
+        throw new NotImplementedException();
     }
 
-    private string[] GetDetailsPagesUrls(string rawHtml)
-    {
-        return Array.Empty<string>();
-    }
 }
 public class CosmosDbListPageFoundHandler : IListPageFoundHandler
 {
@@ -42,6 +44,17 @@ public class CosmosDbListPageFoundHandler : IListPageFoundHandler
     {
         var container = cosmosClient.GetContainer(Consts.CosmosDatabaseName, Consts.CosmosListPageContainerName);
         await container.CreateItemAsync(listPage);
+    }
+}
+public interface IListPageParser
+{
+    public string[] GetDetailsPagesUrls(string rawHtml);
+}
+public class IGratkaListPageParser : IListPageParser
+{
+    public string[] GetDetailsPagesUrls(string rawHtml)
+    {
+        throw new NotImplementedException();
     }
 }
 public record ListPage(Guid Id, string Url, string RawHtml);

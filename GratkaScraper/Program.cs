@@ -13,7 +13,8 @@ var host = new HostBuilder()
     {
         serviceCollection.AddHttpClient();
         serviceCollection.AddTransient<IHttpClient, HttpClientThatYouCanActuallyMock>();
-        //serviceCollection.AddTransient<IListPageFoundHandler, InMemoryGratkaListPageFoundHandler>();
+        //serviceCollection.AddSingleton<IListPageParser, IGratkaListPageParser>();
+        //serviceCollection.AddTransient<IListPageFoundHandler, InListPageFoundHandler>();
         serviceCollection.AddTransient<IListPageFoundHandler, CosmosDbListPageFoundHandler>();
         serviceCollection.AddTransient<IListPageSource, ListPageSourcePagingHttpDownloader>();
         serviceCollection.AddTransient<IScraper, WebScraper>();
