@@ -1,4 +1,5 @@
 using BaseScraper;
+using BaseScraper.Infrastructure;
 using GratkaScraper;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;

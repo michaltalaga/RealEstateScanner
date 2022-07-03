@@ -1,4 +1,6 @@
-﻿namespace BaseScraper;
+﻿using BaseScraper.Infrastructure;
+
+namespace BaseScraper;
 
 public class ListPageSourcePagingHttpDownloader : IListPageSource
 {

@@ -1,4 +1,5 @@
 using BaseScraper;
+using BaseScraper.Infrastructure;
 using NSubstitute;
 
 namespace BaseScraperTests;
