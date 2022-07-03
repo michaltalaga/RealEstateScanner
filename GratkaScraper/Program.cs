@@ -15,7 +15,7 @@ var host = new HostBuilder()
         serviceCollection.AddTransient<IHttpClient, HttpClientThatYouCanActuallyMock>();
         //serviceCollection.AddSingleton<IListPageParser, IGratkaListPageParser>();
         //serviceCollection.AddTransient<IListPageFoundHandler, InListPageFoundHandler>();
-        serviceCollection.AddTransient<IListPageFoundHandler, CosmosDbListPageFoundHandler>();
+        serviceCollection.AddTransient<IItemFoundSink, CosmosDbItemFoundSink>();
         serviceCollection.AddTransient<IListPageSource, ListPageSourcePagingHttpDownloader>();
         serviceCollection.AddTransient<IScraper, WebScraper>();
         serviceCollection.AddSingleton(x =>

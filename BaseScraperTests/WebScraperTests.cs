@@ -15,11 +15,11 @@ public class WebScraperTests
         new ListPage(Guid.NewGuid(), "https://site.com/2", "dummy"),
     };
     IListPageSource listPageSource = Substitute.For<IListPageSource>();
-    IListPageFoundHandler listPageFoundHandler = Substitute.For<IListPageFoundHandler>();
+    IItemFoundSink itemFoundSink = Substitute.For<IItemFoundSink>();
 
     public WebScraperTests()
     {
-        webScraper = new WebScraper(listPageSource, listPageFoundHandler);
+        webScraper = new WebScraper(listPageSource, itemFoundSink);
         listPageSource.Get(pageUrlFormatString, maxPages).Returns(pages.ToAsyncEnumerable());
     }
 
@@ -36,6 +36,6 @@ public class WebScraperTests
     {
         await webScraper.Scrape(pageUrlFormatString, maxPages);
 
-        await listPageFoundHandler.Received(pages.Length).Found(Arg.Any<ListPage>());
+        await itemFoundSink.Received(pages.Length).Found(Arg.Any<ListPage>());
     }
 }

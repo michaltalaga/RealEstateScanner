@@ -14,11 +14,11 @@ internal class Class1
 {
 }
 
-public interface IListPageFoundHandler
+public interface IItemFoundSink
 {
-    Task Found(ListPage listPage);
+    Task Found(object item);
 }
-public class InListPageFoundHandler : IListPageFoundHandler
+public class InListPageFoundHandler : IItemFoundSink
 {
     private readonly IListPageParser listPageParser;
 
@@ -26,24 +26,24 @@ public class InListPageFoundHandler : IListPageFoundHandler
     {
         this.listPageParser = listPageParser;
     }
-    public async Task Found(ListPage listPage)
+    public async Task Found(object item)
     {
         throw new NotImplementedException();
     }
 
 }
-public class CosmosDbListPageFoundHandler : IListPageFoundHandler
+public class CosmosDbItemFoundSink : IItemFoundSink
 {
     private readonly CosmosClient cosmosClient;
 
-    public CosmosDbListPageFoundHandler(CosmosClient cosmosClient)
+    public CosmosDbItemFoundSink(CosmosClient cosmosClient)
     {
         this.cosmosClient = cosmosClient;
     }
-    public async Task Found(ListPage listPage)
+    public async Task Found(object item)
     {
         var container = cosmosClient.GetContainer(Consts.CosmosDatabaseName, Consts.CosmosListPageContainerName);
-        await container.CreateItemAsync(listPage);
+        await container.CreateItemAsync(item);
     }
 }
 public interface IListPageParser

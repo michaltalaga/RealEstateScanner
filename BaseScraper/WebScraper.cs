@@ -3,19 +3,19 @@
 public class WebScraper : IScraper
 {
     private readonly IListPageSource listPageSource;
-    private readonly IListPageFoundHandler listPageFoundHandler;
+    private readonly IItemFoundSink itemFoundSink;
 
-    public WebScraper(IListPageSource listPageSource, IListPageFoundHandler listPageFoundHandler)
+    public WebScraper(IListPageSource listPageSource, IItemFoundSink itemFoundSink)
     {
         this.listPageSource = listPageSource;
-        this.listPageFoundHandler = listPageFoundHandler;
+        this.itemFoundSink = itemFoundSink;
     }
 
     public async Task Scrape(string urlFormatString, int maxPages = int.MinValue)
     {
         await foreach (var page in listPageSource.Get(urlFormatString, maxPages))
         {
-            await listPageFoundHandler.Found(page);
+            await itemFoundSink.Found(page);
         }
     }
 }
