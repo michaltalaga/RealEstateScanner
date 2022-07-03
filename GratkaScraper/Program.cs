@@ -11,6 +11,7 @@ var host = new HostBuilder()
     .ConfigureServices((hostBuilderContext, serviceCollection) =>
     {
         serviceCollection.AddHttpClient();
+        serviceCollection.AddTransient<IHttpClient, HttpClientThatYouCanActuallyMock>();
         //serviceCollection.AddTransient<IListPageFoundHandler, InMemoryGratkaListPageFoundHandler>();
         serviceCollection.AddTransient<IListPageFoundHandler, CosmosDbListPageFoundHandler>();
         serviceCollection.AddTransient<IListPageSource, ListPageSourcePagingHttpDownloader>();

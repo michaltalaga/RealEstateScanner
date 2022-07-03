@@ -1,57 +1,44 @@
 using BaseScraper;
-using Moq;
-using Moq.Contrib.HttpClient;
+using NSubstitute;
 
 namespace BaseScraperTests;
 
 public class ListPageSourcePagingHttpDownloaderTests
 {
-    Mock<HttpMessageHandler> handler;
+    IHttpClient httpClient = Substitute.For<IHttpClient>();
     ListPageSourcePagingHttpDownloader downloader;
+
 
     public ListPageSourcePagingHttpDownloaderTests()
     {
-        handler = new Mock<HttpMessageHandler>();
-        var factory = handler.CreateClientFactory();
-        downloader = new ListPageSourcePagingHttpDownloader(factory);
+        httpClient.GetStringAsync(Arg.Any<string>()).Returns(Task.FromException<string>(new Exception()));
+        downloader = new ListPageSourcePagingHttpDownloader(httpClient);
     }
 
-    
     [Fact]
     public async Task PagesCorrectlyUsingUrlFormatString()
     {
-        var maxPagesToDownload = 5;
-        var sequence = new MockSequence();
+        const int maxPagesToDownload = 5;
         for (int i = 1; i <= maxPagesToDownload; i++)
         {
-            handler.InSequence(sequence).SetupRequest($"https://site.com/{i}").ReturnsResponse("dummy");
+            httpClient.GetStringAsync($"https://site.com/{i}").Returns("page" + i);
         }
-        
         await foreach (var _ in downloader.Get("https://site.com/{0}", maxPagesToDownload)) { }
-    }
-    [Fact]
-    public async Task RespectsMaxPagesToDownload()
-    {
-        var maxPagesToDownload = 5;
-        handler.SetupAnyRequest().ReturnsResponse("dummy");
-
-        await foreach (var item in downloader.Get("https://site.com/{0}", maxPagesToDownload)) { }
-        
-        handler.VerifyAnyRequest(Times.Exactly(maxPagesToDownload));
+        await httpClient.Received(maxPagesToDownload).GetStringAsync(Arg.Any<string>());
     }
 
     [Fact]
     public async Task StopsWhenNoMorePages()
     {
-        var sequence = new MockSequence();
-        handler.InSequence(sequence).SetupRequest($"https://site.com/{1}").ReturnsResponse("dummy");
-        handler.InSequence(sequence).SetupRequest($"https://site.com/{2}").ReturnsResponse("dummy");
-        handler.InSequence(sequence).SetupRequest($"https://site.com/{3}").ReturnsResponse(System.Net.HttpStatusCode.NotFound);
+        
+        httpClient.GetStringAsync($"https://site.com/{1}").Returns("dummy");
+        httpClient.GetStringAsync($"https://site.com/{2}").Returns("dummy");
+        httpClient.GetStringAsync($"https://site.com/{3}").Returns(Task.FromException<string>(new Exception()));
 
         var results = 0;
         await foreach (var _ in downloader.Get("https://site.com/{0}", 5)) { results++; }
 
-        handler.VerifyAnyRequest(Times.Exactly(3)); 
+        await httpClient.Received(3).GetStringAsync(Arg.Any<string>());
         Assert.Equal(2, results);
     }
 }

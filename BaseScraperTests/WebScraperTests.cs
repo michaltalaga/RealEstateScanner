@@ -1,6 +1,7 @@
 ﻿using BaseScraper;
 using Dasync.Collections;
-using Moq;
+using NSubstitute;
+
 namespace BaseScraperTests;
 
 public class WebScraperTests
@@ -13,31 +14,28 @@ public class WebScraperTests
         new ListPage(Guid.NewGuid(), "https://site.com/1", "dummy"),
         new ListPage(Guid.NewGuid(), "https://site.com/2", "dummy"),
     };
-    Mock<IListPageSource> listPageSourceMock = new();
-    Mock<IListPageFoundHandler> listPageFoundHandlerMock = new();
+    IListPageSource listPageSource = Substitute.For<IListPageSource>();
+    IListPageFoundHandler listPageFoundHandler = Substitute.For<IListPageFoundHandler>();
 
     public WebScraperTests()
     {
-        webScraper = new WebScraper(listPageSourceMock.Object, listPageFoundHandlerMock.Object);
+        webScraper = new WebScraper(listPageSource, listPageFoundHandler);
+        listPageSource.Get(pageUrlFormatString, maxPages).Returns(pages.ToAsyncEnumerable());
     }
 
     [Fact]
     public async Task GetsPagesFromSource()
     {
-        listPageSourceMock.Setup(x => x.Get(pageUrlFormatString, maxPages)).Returns(pages.ToAsyncEnumerable());
-
         await webScraper.Scrape(pageUrlFormatString, maxPages);
 
-        listPageSourceMock.Verify(x => x.Get(pageUrlFormatString, maxPages), Times.Once);
+        listPageSource.Received(1).Get(pageUrlFormatString, maxPages);
     }
 
     [Fact]
     public async Task PublishesEachPageFoundToHandler()
     {
-        listPageSourceMock.Setup(x => x.Get(pageUrlFormatString, maxPages)).Returns(pages.ToAsyncEnumerable());
-
         await webScraper.Scrape(pageUrlFormatString, maxPages);
 
-        listPageFoundHandlerMock.Verify(x => x.Found(It.IsAny<ListPage>()), Times.Exactly(pages.Length));
+        await listPageFoundHandler.Received(pages.Length).Found(Arg.Any<ListPage>());
     }
 }

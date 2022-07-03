@@ -2,17 +2,16 @@
 
 public class ListPageSourcePagingHttpDownloader : IListPageSource
 {
-    private readonly IHttpClientFactory httpClientFactory;
+    private readonly IHttpClient httpClient;
 
-    public ListPageSourcePagingHttpDownloader(IHttpClientFactory httpClientFactory)
+    public ListPageSourcePagingHttpDownloader(IHttpClient httpClient)
     {
-        this.httpClientFactory = httpClientFactory;
+        this.httpClient = httpClient;
     }
 
     public async IAsyncEnumerable<ListPage> Get(string pageUrlFormatString, int maxPages = int.MaxValue)
     {
         var currentPage = 1;
-        var httpClient = httpClientFactory.CreateClient();
         while (currentPage <= maxPages)
         {
             var listPageUrl = string.Format(pageUrlFormatString, currentPage);

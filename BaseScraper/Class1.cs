@@ -45,4 +45,21 @@ public class CosmosDbListPageFoundHandler : IListPageFoundHandler
     }
 }
 
+public interface IHttpClient
+{
+    Task<String> GetStringAsync(string url);
+}
+public class HttpClientThatYouCanActuallyMock : IHttpClient
+{
+    private readonly IHttpClientFactory httpClientFactory;
+
+    public HttpClientThatYouCanActuallyMock(IHttpClientFactory httpClientFactory)
+    {
+        this.httpClientFactory = httpClientFactory;
+    }
+    public async Task<string> GetStringAsync(string url)
+    {
+        return await httpClientFactory.CreateClient().GetStringAsync(url);
+    }
+}
 public record ListPage(Guid Id, string Url, string RawHtml);
